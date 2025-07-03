@@ -1,16 +1,179 @@
-<!-- popup.html -->
 <!DOCTYPE html>
 <html>
 <head>
-  <style>
-    html {
-      min-height: 5em;
-      min-width: 10em;
-      background: salmon;
-    }
-  </style>
+    <meta charset="utf-8">
+    <title>TransCard Extension</title>
+    <link rel="stylesheet" href="popup.css">
+    <script src="popup.js"></script>
 </head>
 <body>
-  <p>Hello, world!</p>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>📚 TransCard</h1>
+            <p>Your smart translation companion</p>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number" id="flashcardCount">3</div>
+                <div class="stat-label">Flashcards</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="todayCount">8</div>
+                <div class="stat-label">Words Today</div>
+            </div>
+        </div>
+
+        <!-- How to Use -->
+        <div class="how-to-use">
+            <h3>💡 How to Use</h3>
+            <p>Double-click any text on a webpage to translate it instantly. Words are automatically saved to "Today's Words" for easy management.</p>
+        </div>
+
+        <!-- Manage Current Flashcards -->
+        <div class="section">
+            <div class="section-title" onclick="toggleSection('flashcards')">
+                <span>📚 Manage Flashcards</span>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="section-content" id="flashcards-content">
+                <div class="flashcard-selector">
+                    <select class="flashcard-dropdown" id="flashcardSelect">
+                        <option value="spanish">Spanish Basics</option>
+                        <option value="french">French Vocabulary</option>
+                        <option value="german">German Words</option>
+                    </select>
+                    <button class="btn btn-secondary btn-sm" id="newFlashcardBtn">
+                        <span>➕</span>
+                        <span>New</span>
+                    </button>
+                </div>
+                
+                <div class="word-list scrollable" id="flashcardWords">
+                    <div class="word-item">
+                        <div class="word-content">
+                            <div class="word-text">casa</div>
+                            <div class="word-meaning">house, home</div>
+                            <div class="word-pronunciation">/ˈkasa/</div>
+                        </div>
+                        <div class="word-actions">
+                            <button class="action-btn play" onclick="playPronunciation('casa')">🔊</button>
+                            <button class="action-btn delete" onclick="deleteWord('casa', 'flashcard')">🗑️</button>
+                        </div>
+                    </div>
+                    <div class="word-item">
+                        <div class="word-content">
+                            <div class="word-text">perro</div>
+                            <div class="word-meaning">dog</div>
+                            <div class="word-pronunciation">/ˈpero/</div>
+                        </div>
+                        <div class="word-actions">
+                            <button class="action-btn play" onclick="playPronunciation('perro')">🔊</button>
+                            <button class="action-btn delete" onclick="deleteWord('perro', 'flashcard')">🗑️</button>
+                        </div>
+                    </div>
+                    <div class="word-item">
+                        <div class="word-content">
+                            <div class="word-text">agua</div>
+                            <div class="word-meaning">water</div>
+                            <div class="word-pronunciation">/ˈaɣwa/</div>
+                        </div>
+                        <div class="word-actions">
+                            <button class="action-btn play" onclick="playPronunciation('agua')">🔊</button>
+                            <button class="action-btn delete" onclick="deleteWord('agua', 'flashcard')">🗑️</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="btn btn-primary" onclick="addWordToFlashcard()">
+                    <span>➕</span>
+                    <span>Add New Word</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Today's Words -->
+        <div class="section">
+            <div class="section-title" onclick="toggleSection('today')">
+                <span>📝 Today's Words</span>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="section-content" id="today-content">
+                <div class="word-list scrollable" id="todayWords">
+                    <div class="word-item">
+                        <div class="word-content">
+                            <div class="word-text">biblioteca</div>
+                            <div class="word-meaning">library</div>
+                            <div class="word-pronunciation">/biblio'teka/</div>
+                        </div>
+                        <div class="word-actions">
+                            <button class="action-btn play" onclick="playPronunciation('biblioteca')">🔊</button>
+                            <button class="action-btn add" onclick="addToFlashcard('biblioteca')">📚</button>
+                            <button class="action-btn delete" onclick="deleteWord('biblioteca', 'today')">🗑️</button>
+                        </div>
+                    </div>
+                    <div class="word-item">
+                        <div class="word-content">
+                            <div class="word-text">ordenador</div>
+                            <div class="word-meaning">computer</div>
+                            <div class="word-pronunciation">/orðena'ðor/</div>
+                        </div>
+                        <div class="word-actions">
+                            <button class="action-btn play" onclick="playPronunciation('ordenador')">🔊</button>
+                            <button class="action-btn add" onclick="addToFlashcard('ordenador')">📚</button>
+                            <button class="action-btn delete" onclick="deleteWord('ordenador', 'today')">🗑️</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flashcard-selector">
+                    <select class="flashcard-dropdown" id="targetFlashcard">
+                        <option value="spanish">Spanish Basics</option>
+                        <option value="french">French Vocabulary</option>
+                        <option value="german">German Words</option>
+                        <option value="new">+ Create New Flashcard</option>
+                    </select>
+                    <button class="btn btn-secondary btn-sm" onclick="addAllToFlashcard()">
+                        <span>📚</span>
+                        <span>Add All</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Export & Settings -->
+        <div class="section">
+            <div class="section-title" onclick="toggleSection('export')">
+                <span>💾 Export & Settings</span>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="section-content collapsed" id="export-content">
+                <div class="export-controls">
+                    <select id="exportSource">
+                        <option value="all">All Flashcards</option>
+                        <option value="current">Current Flashcard</option>
+                        <option value="today">Today's Words</option>
+                    </select>
+                    <select id="exportFormat">
+                        <option value="anki">Anki (.txt)</option>
+                        <option value="csv">CSV (.csv)</option>
+                        <option value="json">JSON (.json)</option>
+                    </select>
+                </div>
+                
+                <button class="btn btn-primary" id="exportBtn">
+                    <span>📤</span>
+                    <span>Export</span>
+                </button>
+                
+                <button class="btn btn-danger" id="clearBtn">
+                    <span>🗑️</span>
+                    <span>Clear All Data</span>
+                </button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
