@@ -1,0 +1,28 @@
+<div id="translationBox" class="translation-box">
+        <div class="translation-header">
+            <h3 class="selected-word" id="selectedWord">Loading...</h3>
+            <button class="close-btn" onclick="hideTranslationBox()">✕</button>
+        </div>
+        
+        <div class="pronunciation-section">
+            <div class="pronunciation-text" id="pronunciationText">Loading pronunciation...</div>
+            <div class="pronunciation-controls">
+                <button class="speak-btn" id="speakBtn" onclick="speakWord()">
+                    <span id="speakIcon">🔊</span>
+                    <span id="speakText">Speak</span>
+                </button>
+            </div>
+        </div>
+        
+        <div class="translation-section">
+            <div class="translation-label">Translation</div>
+            <div id="translationContent">
+                <div class="loading">Loading translation...</div>
+            </div>
+        </div>
+        
+        <div class="actions-section">
+            <button class="action-btn" onclick="addToFlashcard()">📚 Add to Flashcard</button>
+            <button class="action-btn" onclick="saveWord()">💾 Save Word</button>
+        </div>
+    </div>
