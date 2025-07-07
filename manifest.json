@@ -10,8 +10,8 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["content.js"],
-      "css": ["content.css"]
+      "js": ["translatebox.js"],
+      "css": ["translatebox.css"]
     }
   ],
   "action": {
