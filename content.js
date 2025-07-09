@@ -31,7 +31,7 @@
             event.preventDefault();
         });
 
-        function showTranslationBox(word, x, y) {
+          async function showTranslationBox(word, x, y) {
             currentWord = word;
             const translationBox = document.getElementById('translationBox');
             const selectedWordElement = document.getElementById('selectedWord');
@@ -45,39 +45,51 @@
             // Show the box
             translationBox.classList.add('show');
             isBoxVisible = true;
-            
-            // Set the selected word
-            selectedWordElement.textContent = word;
-            
-            // Look up the word in dictionary
-            const wordData = dictionary[word.toLowerCase()];
-            
-            if (wordData) {
-                // Set pronunciation
-                pronunciationElement.textContent = wordData.pronunciation;
-                
+
+            //fetch the dictionary data
+            try {
+                const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
+                const data = await response.json();
+                // Process the dictionary data
+                 // Set the selected word
+            selectedWordElement.textContent = data[0].word || word;
+           
+            // Set pronunciation
+                pronunciationElement.textContent = data[0].phonetic || 'Pronunciation not available';
+
                 // Set translation
                 let translationHTML = '';
-                wordData.translations.forEach(translation => {
+                data[0].meanings.forEach(meaning => {
                     translationHTML += `
-                        <div class="word-type">${translation.type}</div>
-                        <div class="translation-text">${translation.meaning}</div>
+                        <div class="word-type">${meaning.partOfSpeech}</div>
+                        <div class="translation-text">${meaning.definitions[0].definition}</div>
                         <div class="translation-examples">
-                            Examples: ${translation.examples.join(' • ')}
+                            Examples: ${meaning.definitions[0].example || 'No example available'}
                         </div>
                     `;
                 });
                 translationContent.innerHTML = translationHTML;
-            } else {
-                // Word not found in dictionary
-                pronunciationElement.textContent = 'Pronunciation not available';
+
+            } catch (error) {
+                console.error('Error fetching dictionary data:', error);
+                 // Word not found in dictionary
+
                 translationContent.innerHTML = `
                     <div class="error">
                         Translation not available for "${word}". 
-                        <br><small>In a real app, this would query an online dictionary API.</small>
+                        Please try another word or check your spelling.
                     </div>
                 `;
             }
+        }
+
+        function hideTranslationBox() {
+            const translationBox = document.getElementById('translationBox');
+            translationBox.classList.remove('show');
+            isBoxVisible = false;
+
+            // Clear any text selection
+            window.getSelection().removeAllRanges();
         }
         function hideTranslationBox() {
             const translationBox = document.getElementById('translationBox');
