@@ -4,8 +4,10 @@
 <head>
     <meta charset="utf-8">
     <title>TransCard Extension</title>
-    <link rel="stylesheet" href="popup.css">
-   
+    <link rel="stylesheet" href="content.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="TransCard Extension for quick translations and pronunciations.">
+    <meta name="keywords" content="translation, pronunciation, language, extension, TransCard
 </head>
 <body>
 <div id="translationBox" class="translation-box">
@@ -17,9 +19,8 @@
         <div class="pronunciation-section">
             <div class="pronunciation-text" id="pronunciationText">Loading pronunciation...</div>
             <div class="pronunciation-controls">
-                <button class="speak-btn" id="speakBtn" onclick="speakWord()">
+                <button class="speak-btn" id="speakBtn" >
                     <span id="speakIcon">🔊</span>
-                    <span id="speakText">Speak</span>
                 </button>
             </div>
         </div>
@@ -31,10 +32,7 @@
             </div>
         </div>
         
-        <div class="actions-section">
-            <button class="action-btn" onclick="addToFlashcard()">📚 Add to Flashcard</button>
-            <button class="action-btn" onclick="saveWord()">💾 Save Word</button>
-        </div>
+    
         
     </div>
      <script src="content.js"></script>

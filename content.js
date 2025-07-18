@@ -59,16 +59,33 @@
 
                 // Set translation
                 let translationHTML = '';
+          
                 data[0].meanings.forEach(meaning => {
                     translationHTML += `
                         <div class="word-type">${meaning.partOfSpeech}</div>
                         <div class="translation-text">${meaning.definitions[0].definition}</div>
+                
                         <div class="translation-examples">
                             Examples: ${meaning.definitions[0].example || 'No example available'}
+                        </div>
+
+                        <div class="translation-text">${meaning.definitions[1].definition}</div>
+                        <div class="translation-examples">
+                            Examples: ${meaning.definitions[1].example || 'No example available'}
                         </div>
                     `;
                 });
                 translationContent.innerHTML = translationHTML;
+                // Set audio if available
+                const audioUrl = data[0].phonetics.find(p => p.audio)?.audio;
+                const speakBtn = document.getElementById('speakBtn');
+                if (audioUrl) {
+                    speakBtn.style.display = 'inline-block';
+                    speakBtn.onclick = () => speakWord(audioUrl);
+                }
+                else {
+                    speakBtn.style.display = 'none';
+                }
 
             } catch (error) {
                 console.error('Error fetching dictionary data:', error);
@@ -105,3 +122,30 @@
             
             alert(`"${currentWord}" added to flashcard! 📚\n\n(In a real app, this would integrate with your flashcard system)`);
         }
+       let currentAudio = null;
+
+function speakWord(audioUrl) {
+    if (!audioUrl) return;
+    // Nếu đang phát audio cũ thì dừng lại
+    if (currentAudio) {
+        currentAudio.pause();
+        currentAudio.currentTime = 0;
+    }
+    currentAudio = new Audio(audioUrl);
+    currentAudio.play();
+}
+const dictionaryDataSchema = {
+    word: String, // the word itself
+    phonetic: String, // pronunciation
+    meanings: [
+        {
+            partOfSpeech: String, // word type (noun, verb, etc.)
+            definitions: [
+                {
+                    definition: String,
+                    example: String
+                }
+            ]
+        }
+    ]
+}
