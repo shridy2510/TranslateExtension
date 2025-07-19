@@ -8,7 +8,7 @@
             
             if (selectedText) {
                 // Clean up the selected text (remove punctuation)
-                const cleanWord = selectedText.toLowerCase().replace(/[^\w]/g, '');
+                const cleanWord = selectedText.toLowerCase().replace(/[^\p{L}\p{N}_]/gu, '');
                 
                 if (cleanWord) {
                     showTranslationBox(cleanWord, event.pageX, event.pageY);
@@ -26,10 +26,9 @@
         document.getElementById('translationBox').addEventListener('selectstart', function(event) {
             event.preventDefault();
         });
-           // Prevent double-click text selection on translation box
-        document.getElementById('translationBox').addEventListener('selectstart', function(event) {
-            event.preventDefault();
-        });
+                event.preventDefault();
+            });
+        }
 
           async function showTranslationBox(word, x, y) {
             currentWord = word;
@@ -86,7 +85,30 @@
                 else {
                     speakBtn.style.display = 'none';
                 }
+                // Save the word to currentWord for later use
+                const schema = {
+                    word: data[0].word,
+                    phonetic: data[0].phonetic || '',
+                    meanings: data[0].meanings.map(meaning => ({
+                        partOfSpeech: meaning.partOfSpeech,
+                        definitions: meaning.definitions.slice(0, 2).map(def => ({
+                            definition: def.definition,
+                            example: def.example || ''
+                        }))
+                    }))
+                };
+                const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+    const key = `todayWords_${today}`;
+    const result = await chrome.storage.local.get(key);
+    if (!result[key]) {
+        // Chưa có, tạo mới
+        await chrome.storage.local.set({ [key]: [] });
+        console.log('Khởi tạo todayWords cho ngày', today);
+    } else {
+           await saveWord(key, result[key], schema);
+    }
 
+             
             } catch (error) {
                 console.error('Error fetching dictionary data:', error);
                  // Word not found in dictionary
@@ -134,7 +156,7 @@ function speakWord(audioUrl) {
     currentAudio = new Audio(audioUrl);
     currentAudio.play();
 }
-const dictionaryDataSchema = {
+const wordData = {
     word: String, // the word itself
     phonetic: String, // pronunciation
     meanings: [
@@ -142,10 +164,43 @@ const dictionaryDataSchema = {
             partOfSpeech: String, // word type (noun, verb, etc.)
             definitions: [
                 {
-                    definition: String,
+                    definition: String, 
                     example: String
                 }
             ]
         }
     ]
 }
+// Lưu với key là tên từ (word)
+async function saveWord(key, flashcard, wordData) {   
+  try {
+    // Check for duplicate word before adding
+    const exists = flashcard.some(item => item.word === wordData.word);
+    if (!exists) {
+        flashcard.push(wordData);
+        await chrome.storage.local.set({ [key]: flashcard });
+        console.log(`Saved data for "${wordData.word}"`);
+    } else {
+        console.log(`"${wordData.word}" already exists in flashcard.`);
+    }
+  } catch (error) {
+    console.error('Failed to save data:', error);
+  }
+}
+
+async function initTodayWords() {
+    const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+    const key = `todayWords_${today}`;
+    const result = await chrome.storage.local.get(key);
+    if (!result[key]) {
+        // Chưa có, tạo mới
+        await chrome.storage.local.set({ [key]: [] });
+        console.log('Khởi tạo todayWords cho ngày', today);
+    } else {
+        console.log('todayWords đã tồn tại cho ngày', today);
+    }
+    // Sau đó, bạn có thể dùng key này để thêm/xóa từ vựng hôm nay
+}
+
+
+initTodayWords();
