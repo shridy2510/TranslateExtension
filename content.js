@@ -24,11 +24,11 @@
         });
          // Prevent double-click text selection on translation box
         document.getElementById('translationBox').addEventListener('selectstart', function(event) {
-            event.preventDefault();
+            event.preventDefault();s
         });
                 event.preventDefault();
-            });
-        }
+        ;
+
 
           async function showTranslationBox(word, x, y) {
             currentWord = word;
@@ -99,19 +99,27 @@
                 };
                 const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
     const key = `todayWords_${today}`;
-    const result = await chrome.storage.local.get(key);
-    if (!result[key]) {
-        // Chưa có, tạo mới
-        await chrome.storage.local.set({ [key]: [] });
-        console.log('Khởi tạo todayWords cho ngày', today);
-    } else {
-           await saveWord(key, result[key], schema);
-    }
+    const storage = await chrome.storage.local.get("wordTodays");
+const result= storage.wordTodays || {};
+   
 
-             
-            } catch (error) {
-                console.error('Error fetching dictionary data:', error);
-                 // Word not found in dictionary
+    if (key in result) {
+        // If the key exists, append the new word
+            await saveTodayWord(key, schema);
+        } else {
+        // If the key doesn't exist, create a new entry
+        console.log('Creating new entry for today:', key);
+        // Initialize the array for today's words
+        result[key] = [];
+        // Save the new entry
+        await chrome.storage.local.set({ wordTodays: result  });
+        console.log('Saved new entry for today:', key);
+        await saveTodayWord(key, schema);
+        console.log('Word saved:', schema.word);
+    }
+} catch (error) {
+    console.error('Error fetching dictionary data:', error);
+    // Word not found in dictionary
 
                 translationContent.innerHTML = `
                     <div class="error">
@@ -120,7 +128,7 @@
                     </div>
                 `;
             }
-        }
+        
 
         function hideTranslationBox() {
             const translationBox = document.getElementById('translationBox');
@@ -172,35 +180,27 @@ const wordData = {
     ]
 }
 // Lưu với key là tên từ (word)
-async function saveWord(key, flashcard, wordData) {   
+async function saveTodayWord(key, wordData) {   
   try {
     // Check for duplicate word before adding
-    const exists = flashcard.some(item => item.word === wordData.word);
+    const exists = wordTodays[key]?.some(item => item.word === wordData.word);
     if (!exists) {
-        flashcard.push(wordData);
-        await chrome.storage.local.set({ [key]: flashcard });
-        console.log(`Saved data for "${wordData.word}"`);
-    } else {
-        console.log(`"${wordData.word}" already exists in flashcard.`);
+        const storage = await chrome.storage.local.get("wordTodays");
+        const wordTodays = storage.wordTodays || {};
+
+        wordTodays[key] = wordTodays[key] || [];    
+        wordTodays[key].push(wordData);
+   
+        // Save the updated wordTodays object
+        await chrome.storage.local.set({ wordTodays });
+        console.log('Word saved successfully:', wordData.word);
     }
-  } catch (error) {
+} catch (error) {
     console.error('Failed to save data:', error);
   }
 }
 
-async function initTodayWords() {
-    const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
-    const key = `todayWords_${today}`;
-    const result = await chrome.storage.local.get(key);
-    if (!result[key]) {
-        // Chưa có, tạo mới
-        await chrome.storage.local.set({ [key]: [] });
-        console.log('Khởi tạo todayWords cho ngày', today);
-    } else {
-        console.log('todayWords đã tồn tại cho ngày', today);
-    }
-    // Sau đó, bạn có thể dùng key này để thêm/xóa từ vựng hôm nay
-}
 
 
-initTodayWords();
+
+          }
