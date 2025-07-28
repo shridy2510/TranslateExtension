@@ -10,8 +10,8 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["translatebox.js"],
-      "css": ["translatebox.css"]
+      "js": ["content.js"],
+      "css": ["content.css"]
     }
   ],
   "action": {
@@ -19,8 +19,8 @@
     "default_title": "TransCard"
   },
   "icons": {
-    "16": "icon16.png",
-    "48": "icon48.png",
-    "128": "icon128.png"
+    "16": "icons/icons8-book-16.png",
+    "48": "icons/icons8-book-48.png",
+    "64": "icons/icons8-book-64.png"
   }
 }

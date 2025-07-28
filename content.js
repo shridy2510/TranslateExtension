@@ -24,13 +24,11 @@
         });
          // Prevent double-click text selection on translation box
         document.getElementById('translationBox').addEventListener('selectstart', function(event) {
-            event.preventDefault();s
+            event.preventDefault();
         });
-                event.preventDefault();
-        ;
+        // Function to show the translation box
 
-
-          async function showTranslationBox(word, x, y) {
+        async function showTranslationBox(word, x, y) {
             currentWord = word;
             const translationBox = document.getElementById('translationBox');
             const selectedWordElement = document.getElementById('selectedWord');
@@ -130,14 +128,7 @@ const result= storage.wordTodays || {};
             }
         
 
-        function hideTranslationBox() {
-            const translationBox = document.getElementById('translationBox');
-            translationBox.classList.remove('show');
-            isBoxVisible = false;
-
-            // Clear any text selection
-            window.getSelection().removeAllRanges();
-        }
+     
         function hideTranslationBox() {
             const translationBox = document.getElementById('translationBox');
             translationBox.classList.remove('show');

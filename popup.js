@@ -6,10 +6,10 @@ function toggleSection(sectionId) {
             title.classList.toggle('collapsed');
         }
 
-        function playPronunciation(word) {
-            // Simulate pronunciation
-            console.log('Playing pronunciation for:', word);
-            // Add actual text-to-speech logic here
+        function editWord(word) {
+            // Simulate editing
+            console.log('Editing word:', word);
+            // Add actual editing logic here
         }
 
         function deleteWord(word, source) {
@@ -64,13 +64,36 @@ function toggleSection(sectionId) {
             setTimeout(() => this.innerHTML = originalText, 2000);
         });
 
-        document.getElementById('clearBtn').addEventListener('click', function() {
-            if (confirm('Are you sure you want to clear all data? This cannot be undone.')) {
-                console.log('Clearing all data');
-                // Add clear logic here
-            }
-        });
+                     
 
         // Initialize - collapse export section by default
         document.getElementById('export-content').classList.add('collapsed');
         document.querySelector('[onclick="toggleSection(\'export\')"]').classList.add('collapsed');
+
+        //count flash card
+        async function countFlashcards() {
+            const result = await chrome.storage.local.get('flashCards');
+            if (!result.flashCards) {
+                console.log('No flashcards found');
+                return;
+            }
+
+            const flashcards = result.flashCards;
+            const flashcardCount = Object.keys(flashcards).length;
+            document.getElementById('flashcardCount').textContent = `(${flashcardCount})`;
+        }
+        // count wordTodays
+        async function countWordTodays() {
+            const result = await chrome.storage.local.get('wordTodays');
+            if (!result.wordTodays) {
+                console.log('No wordTodays found');
+                return;
+            }                       
+            const wordTodays = result.wordTodays;
+            const wordTodayCount = Object.keys(wordTodays).length;
+            document.getElementById('wordTodayCount').textContent = `(${wordTodayCount})`;
+            }
+        countFlashcards();  
+        countWordTodays();
+
+      
