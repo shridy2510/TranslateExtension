@@ -7,6 +7,9 @@
     "activeTab",
     "storage"
   ],
+  "host_permissions": [
+    "https://api.dictionaryapi.dev/*"
+  ],
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
@@ -14,6 +17,15 @@
       "css": ["content.css"]
     }
   ],
+  "web_accessible_resources": [
+    {
+      "resources": ["content.html", "content.css"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; media-src 'self' https://api.dictionaryapi.dev;"
+  },
   "action": {
     "default_popup": "popup.html",
     "default_title": "TransCard"
