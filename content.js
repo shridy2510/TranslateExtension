@@ -10,7 +10,10 @@ function hideTranslationBox() {
 }
 
 function createTranslationBox() {
-  if (document.getElementById("translationBox")) return;
+  const oldBox = document.getElementById("translationBox");
+  if (oldBox) oldBox.remove(); // xoá box cũ nếu có
+
+  // Create a new translation box
 
   const box = document.createElement("div");
   box.id = "translationBox";
@@ -36,6 +39,7 @@ function createTranslationBox() {
 
   document.body.appendChild(box);
   const closeBtn = box.querySelector(".close-btn");
+  console.log("Creating translation box");
   closeBtn.addEventListener("click", hideTranslationBox);
 }
 
@@ -49,9 +53,8 @@ document.addEventListener("dblclick", function (event) {
     const cleanWord = selectedText
       .toLowerCase()
       .replace(/[^\p{L}\p{N}_]/gu, "");
-
     if (cleanWord) {
-      showTranslationBox(cleanWord, event.pageX, event.pageY);
+      showTranslationBox(cleanWord, event.clientX, event.clientY);
     }
   }
 });
@@ -59,6 +62,12 @@ document.addEventListener("dblclick", function (event) {
 document.addEventListener("click", function (event) {
   const translationBox = document.getElementById("translationBox");
   if (isBoxVisible && !translationBox.contains(event.target)) {
+    hideTranslationBox();
+  }
+});
+//close translation box when scrolling
+document.addEventListener("scroll", function () {
+  if (isBoxVisible) {
     hideTranslationBox();
   }
 });
@@ -71,7 +80,9 @@ document
 // Function to show the translation box
 
 async function showTranslationBox(word, x, y) {
+  console.log("Showing translation for:", word);
   createTranslationBox();
+  console.log("Current word set to:", word);
   currentWord = word;
   const translationBox = document.getElementById("translationBox");
   const selectedWordElement = document.getElementById("selectedWord");
@@ -79,8 +90,24 @@ async function showTranslationBox(word, x, y) {
   const translationContent = document.getElementById("translationContent");
 
   // Position the box
-  translationBox.style.left = Math.min(x, window.innerWidth - 420) + "px";
-  translationBox.style.top = y + 20 + "px";
+const rect = translationBox.getBoundingClientRect();
+const boxWidth = rect.width;
+const boxHeight = rect.height;
+ // Height of the translation box
+if (y + boxHeight + 10 > window.innerHeight) {
+  // Gần đáy -> hiển thị lên trên
+   translationBox.style.top = y - boxHeight - 10 + "px";
+} else {
+  // Gần đỉnh -> hiển thị dưới
+  translationBox.style.top = y + 10 + "px";
+}
+if (x + boxWidth  > window.innerWidth) {
+  // Gần phải -> hiển thị sang trái
+  translationBox.style.left = x - boxWidth + "px";
+} else {
+  // Gần trái -> hiển thị sang phải
+  translationBox.style.left = x + "px";
+}
 
   // Show the box
   translationBox.classList.add("show");
@@ -153,14 +180,17 @@ async function showTranslationBox(word, x, y) {
       })),
     };
     await saveTodayWord(schema);
+    // repositioning the box after content is loaded
+    translationBox.style.top = y + 10 + "px"; // Reposition after content
+    translationBox.style.left = x + "px"; // Reposition after content
+    
   } catch (error) {
     console.error("Error fetching dictionary data:", error);
-    // Word not found in dictionary
 
+    // Word not found in dictionary
+   selectedWordElement.textContent = word;
     translationContent.innerHTML = `
-        <div class="error">
-            Translation not available for "${word}". 
-        </div>
+        <div > </div>
     `;
   }
 
