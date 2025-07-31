@@ -30,7 +30,7 @@ function createTranslationBox() {
       </div>
     </div>
     <div class="translation-section">
-      <div class="translation-label">Translation</div>
+      <div class="translation-label" id="translationLabel">Translation</div>
       <div id="translationContent">
         <div class="loading">Loading translation...</div>
       </div>
@@ -80,34 +80,23 @@ document
 // Function to show the translation box
 
 async function showTranslationBox(word, x, y) {
-  console.log("Showing translation for:", word);
   createTranslationBox();
-  console.log("Current word set to:", word);
   currentWord = word;
   const translationBox = document.getElementById("translationBox");
   const selectedWordElement = document.getElementById("selectedWord");
   const pronunciationElement = document.getElementById("pronunciationText");
   const translationContent = document.getElementById("translationContent");
+  const speakBtn = document.getElementById("speakBtn");
+  const translationLabel = document.getElementById("translationLabel");
 
   // Position the box
-const rect = translationBox.getBoundingClientRect();
-const boxWidth = rect.width;
-const boxHeight = rect.height;
+let rect = translationBox.getBoundingClientRect();
+let boxWidth = rect.width;
+let boxHeight = rect.height;
  // Height of the translation box
-if (y + boxHeight + 10 > window.innerHeight) {
-  // Gần đáy -> hiển thị lên trên
-   translationBox.style.top = y - boxHeight - 10 + "px";
-} else {
-  // Gần đỉnh -> hiển thị dưới
-  translationBox.style.top = y + 10 + "px";
-}
-if (x + boxWidth  > window.innerWidth) {
-  // Gần phải -> hiển thị sang trái
-  translationBox.style.left = x - boxWidth + "px";
-} else {
-  // Gần trái -> hiển thị sang phải
-  translationBox.style.left = x + "px";
-}
+
+  translationBox.style.left = x + "px"; // Right of the cursor
+  translationBox.style.top = y + 10 + "px"; // Below the cursor
 
   // Show the box
   translationBox.classList.add("show");
@@ -181,8 +170,26 @@ if (x + boxWidth  > window.innerWidth) {
     };
     await saveTodayWord(schema);
     // repositioning the box after content is loaded
-    translationBox.style.top = y + 10 + "px"; // Reposition after content
-    translationBox.style.left = x + "px"; // Reposition after content
+    boxWidth = translationBox.getBoundingClientRect().width;
+    boxHeight = translationBox.getBoundingClientRect().height;
+    if (y + boxHeight + 10 > window.innerHeight) {
+      translationBox.style.top = y - boxHeight - 10 + "px"; // Above the cursor
+      translationBox.classList.remove("arrow-up");
+      translationBox.classList.add("arrow-down");
+    }
+    else {
+      translationBox.style.top = y + 10 + "px"; // Below the cursor
+      translationBox.classList.remove("arrow-down");
+      translationBox.classList.add("arrow-up");
+    }
+    if (x + boxWidth > window.innerWidth) {
+      translationBox.style.left = x - boxWidth - 10 + "px"; // Left of the cursor
+    }
+    else {
+      translationBox.style.left = x + 10 + "px"; // Right of the cursor
+    }
+
+    
     
   } catch (error) {
     console.error("Error fetching dictionary data:", error);
@@ -190,8 +197,35 @@ if (x + boxWidth  > window.innerWidth) {
     // Word not found in dictionary
    selectedWordElement.textContent = word;
     translationContent.innerHTML = `
-        <div > </div>
+        <div ></div>
     `;
+    pronunciationElement.innerHTML=`
+        <div ></div>
+    `;
+    speakBtn.innerHTML=`
+        <div ></div>
+    `;
+    translationLabel.textContent = "Translation not found";
+    // repositioning the box after content is loaded
+    boxWidth = translationBox.getBoundingClientRect().width;
+    boxHeight = translationBox.getBoundingClientRect().height;
+    if (y + boxHeight + 10 > window.innerHeight) {
+      translationBox.style.top = y - boxHeight - 10 + "px"; // Above the cursor
+      translationBox.classList.remove("arrow-up");
+      translationBox.classList.add("arrow-down");
+    }
+    else {
+      translationBox.style.top = y + 10 + "px"; // Below the cursor
+      translationBox.classList.remove("arrow-down");
+      translationBox.classList.add("arrow-up");
+    }
+    if (x + boxWidth > window.innerWidth) {
+      translationBox.style.left = x - boxWidth - 10 + "px"; // Left of the cursor
+    }
+    else {
+      translationBox.style.left = x + 10 + "px"; // Right of the cursor
+    }
+
   }
 
   let currentAudio = null;
