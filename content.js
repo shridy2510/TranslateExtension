@@ -90,10 +90,10 @@ async function showTranslationBox(word, x, y) {
   const translationLabel = document.getElementById("translationLabel");
 
   // Position the box
-let rect = translationBox.getBoundingClientRect();
-let boxWidth = rect.width;
-let boxHeight = rect.height;
- // Height of the translation box
+  let rect = translationBox.getBoundingClientRect();
+  let boxWidth = rect.width;
+  let boxHeight = rect.height;
+  // Height of the translation box
 
   translationBox.style.left = x + "px"; // Right of the cursor
   translationBox.style.top = y + 10 + "px"; // Below the cursor
@@ -176,33 +176,28 @@ let boxHeight = rect.height;
       translationBox.style.top = y - boxHeight - 10 + "px"; // Above the cursor
       translationBox.classList.remove("arrow-up");
       translationBox.classList.add("arrow-down");
-    }
-    else {
+    } else {
       translationBox.style.top = y + 10 + "px"; // Below the cursor
       translationBox.classList.remove("arrow-down");
       translationBox.classList.add("arrow-up");
     }
     if (x + boxWidth > window.innerWidth) {
       translationBox.style.left = x - boxWidth - 10 + "px"; // Left of the cursor
-    }
-    else {
+    } else {
       translationBox.style.left = x + 10 + "px"; // Right of the cursor
     }
-
-    
-    
   } catch (error) {
     console.error("Error fetching dictionary data:", error);
 
     // Word not found in dictionary
-   selectedWordElement.textContent = word;
+    selectedWordElement.textContent = word;
     translationContent.innerHTML = `
         <div ></div>
     `;
-    pronunciationElement.innerHTML=`
+    pronunciationElement.innerHTML = `
         <div ></div>
     `;
-    speakBtn.innerHTML=`
+    speakBtn.innerHTML = `
         <div ></div>
     `;
     translationLabel.textContent = "Translation not found";
@@ -213,19 +208,16 @@ let boxHeight = rect.height;
       translationBox.style.top = y - boxHeight - 10 + "px"; // Above the cursor
       translationBox.classList.remove("arrow-up");
       translationBox.classList.add("arrow-down");
-    }
-    else {
+    } else {
       translationBox.style.top = y + 10 + "px"; // Below the cursor
       translationBox.classList.remove("arrow-down");
       translationBox.classList.add("arrow-up");
     }
     if (x + boxWidth > window.innerWidth) {
       translationBox.style.left = x - boxWidth - 10 + "px"; // Left of the cursor
-    }
-    else {
+    } else {
       translationBox.style.left = x + 10 + "px"; // Right of the cursor
     }
-
   }
 
   let currentAudio = null;

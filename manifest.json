@@ -3,13 +3,8 @@
   "name": "TransCard - Translation & Flashcards",
   "version": "1.0",
   "description": "Double-click any text to translate, get pronunciation, and create flashcards",
-  "permissions": [
-    "activeTab",
-    "storage"
-  ],
-  "host_permissions": [
-    "https://api.dictionaryapi.dev/*"
-  ],
+  "permissions": ["activeTab", "storage","sidePanel"],
+  "host_permissions": ["https://api.dictionaryapi.dev/*"],
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
@@ -27,12 +22,17 @@
     "extension_pages": "script-src 'self'; media-src 'self' https://api.dictionaryapi.dev;"
   },
   "action": {
-    "default_popup": "popup.html",
     "default_title": "TransCard"
   },
   "icons": {
     "16": "icons/icons8-book-16.png",
     "48": "icons/icons8-book-48.png",
     "64": "icons/icons8-book-64.png"
+  },
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  },
+   "background": {
+    "service_worker": "service-worker.js"
   }
 }
