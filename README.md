@@ -14,11 +14,7 @@ HTML, CSS, JavaScript, Chrome Storage API
 Example:
 When I double-clicked cookies on some random website, it showed:
 
-css
-Copy
-Edit
-cookies  
-✕  
+cookies          ✕  
 /ˈkʊkiz/   🔊  
 Translation  
 noun  
