@@ -1,208 +1,116 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8" />
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TransCard Extension</title>
-    <link rel="stylesheet" href="sidepanel.css" />
-  </head>
-  <body>
-    <div class="container">
-      <!-- Header -->
-      <div class="header">
-        <h1>📚 TransCard</h1>
-      </div>
-      <!-- Stats -->
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-number" id="flashcardCount"></div>
-          <div class="stat-label">Flashcards</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number" id="wordTodayCount"></div>
-          <div class="stat-label">Words Today</div>
-        </div>
-      </div>
-
-
-      <!-- Manage Current Flashcards -->
-      <div class="section">
-        <div class="section-title" id="flashcards-toggle">
-          <span>📚 Manage Flashcards</span>
-          <span class="toggle-icon">▼</span>
-        </div>
-        <div class="section-content" id="flashcards-content">
-          <div class="flashcard-selector">
-            <select class="flashcard-dropdown" id="flashcardSelect">
-              <option value="spanish">Spanish Basics</option>
-              <option value="french">French Vocabulary</option>
-              <option value="german">German Words</option>
-            </select>
-            <button class="btn btn-secondary btn-sm" id="newFlashcardBtn">
-              <span>➕</span>
-              <span>New</span>
-            </button>
-          </div>
-
-          <div class="word-list scrollable" id="flashcardWords">
-            <div class="word-item">
-              <div class="word-content">
-                <div class="word-text">casa</div>
-                <div class="word-meaning">house, home</div>
-                <div class="word-pronunciation">/ˈkasa/</div>
-              </div>
-              <div class="word-actions">
-                <button class="action-btn edit" id="edit" >
-                  edit
-                </button>
-                <button
-                  class="action-btn delete" id="delete"
-                >
-                  🗑️
-                </button>
-              </div>
-            </div>
-            <div class="word-item">
-              <div class="word-content">
-                <div class="word-text">perro</div>
-                <div class="word-meaning">dog</div>
-                <div class="word-pronunciation">/ˈpero/</div>
-              </div>
-              <div class="word-actions">
-                <button class="action-btn edit">
-                  edit
-                </button>
-                <button
-                  class="action-btn delete"
-                  id="delete"
-                >
-                  🗑️
-                </button>
-              </div>
-            </div>
-            <div class="word-item">
-              <div class="word-content">
-                <div class="word-text">agua</div>
-                <div class="word-meaning">water</div>
-                <div class="word-pronunciation">/ˈaɣwa/</div>
-              </div>
-              <div class="word-actions">
-                <button class="action-btn edit">
-                  edit
-                </button>
-                <button
-                  class="action-btn delete"
-                  id="delete"
-                >
-                >
-                  🗑️
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <button class="btn btn-primary" id="addWordToFlashcard">
-            <span>➕</span>
-            <span>Add New Word</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- Today's Words -->
-      <div class="section">
-        <div class="section-title" id="today-toggle">
-          <span>📝 Today's Words</span>
-          <span class="toggle-icon">▼</span>
-        </div>
-        <div class="section-content" id="today-content">
-          <div class="word-list scrollable" id="todayWords">
-            <div class="word-item">
-              <div class="word-content">
-                <div class="word-text">biblioteca</div>
-                <div class="word-meaning">library</div>
-              </div>
-              <div class="word-actions">
-                <button
-                  class="action-btn add"
-          
-                >
-                  📚
-                </button>
-                <button
-                  class="action-btn delete"
-              
-                >
-                  🗑️
-                </button>
-              </div>
-            </div>
-            <div class="word-item">
-              <div class="word-content">
-                <div class="word-text">ordenador</div>
-                <div class="word-meaning">computer</div>
-                <div class="word-pronunciation">/orðena'ðor/</div>
-              </div>
-              <div class="word-actions">
-                <button
-                  class="action-btn add"
-                  id="addToFlashcard"
-                >
-                  📚
-                </button>
-                <button
-                  class="action-btn delete"
-                  id="delete"
-                >
-                  🗑️
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div class="flashcard-selector">
-            <select class="flashcard-dropdown" id="targetFlashcard">
-              <option value="spanish">Spanish Basics</option>
-              <option value="french">French Vocabulary</option>
-              <option value="german">German Words</option>
-              <option value="new">+ Create New Flashcard</option>
-            </select>
-            <button
-              class="btn btn-secondary btn-sm"
-              id="addAllToFlashcard"
-            >
-              <span>📚</span>
-              <span>Add All</span>
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Export & Settings -->
-      <div class="section">
-        <div class="section-title" id="export-toggle"">
-          <span>💾 Export & Settings</span>
-          <span class="toggle-icon">▼</span>
-        </div>
-        <div class="section-content collapsed" id="export-content">
-          <div class="export-controls">
-            <select id="exportSource">
-              <option value="all">All Flashcards</option>
-              <option value="current">Current Flashcard</option>
-              <option value="today">Today's Words</option>
-            </select>
-            <select id="exportFormat">
-              <option value="anki">Anki (.txt)</option>
-              <option value="csv">CSV (.csv)</option>
-              <option value="json">JSON (.json)</option>
-            </select>
-          </div>
-
-          <button class="btn btn-primary" id="exportBtn">
-            <span>📤</span>
-            <span>Export</span>
-          </button>
-        </div>
-      </div>
+    <link rel="stylesheet" href="sidepanel.css">
+</head>
+<body>
+    <div class="header">
+        <div class="logo">📚 TransCard</div>
     </div>
+
+    <div class="nav-tabs">
+        <button class="nav-tab active" data-tab="history">Manage History</button>
+        <button class="nav-tab" data-tab="flashcards">Flashcards</button>
+        <button class="nav-tab" data-tab="settings">Settings</button>
+    </div>
+
+    <div class="content">
+        <!-- Manage History Tab -->
+        <div id="history" class="tab-content active">
+            <div class="selector-row">
+                <select id="historySelector">
+                    <option value="today">Today Words</option>
+                    <option value="yesterday">Yesterday</option>
+                    <option value="2days">2 Days Ago</option>
+                    <option value="3days">3 Days Ago</option>
+                    <option value="week">This Week</option>
+                </select>
+                <button class="btn btn-primary" id="addAllToFlashcardBtn">
+                    ➕ Add All
+                </button>
+                <button class="btn btn-secondary" id="exportWordsBtn">
+                    📤 Export
+                </button>
+            </div>
+
+            <div class="word-list" id="historyWordList">
+                <!-- Words will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Flashcards Tab -->
+        <div id="flashcards" class="tab-content">
+            <div class="selector-row">
+                <select id="flashcardSelector">
+                    <option value="basic">Basic Words</option>
+                    <option value="advanced">Advanced Words</option>
+                    <option value="business">Business Terms</option>
+                </select>
+                <button class="btn btn-success" id="createFlashcardBtn" title="Tạo flashcard mới">➕</button>
+                <button class="btn btn-danger" id="deleteFlashcardBtn" title="Xóa flashcard">🗑️</button>
+                <button class="btn btn-secondary" id="exportFlashcardBtn">📤</button>
+            </div>
+
+            <div class="word-list" id="flashcardWordList">
+                <!-- Flashcard words will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Settings Tab -->
+        <div id="settings" class="tab-content">
+            <div class="setting-group">
+                <div class="setting-title">General Settings</div>
+                <div class="setting-item">
+                    <div class="setting-label">Auto translate</div>
+                    <div class="toggle-switch active" data-setting="auto-translate">
+                        <div class="toggle-slider"></div>
+                    </div>
+                </div>
+                <div class="setting-item">
+                    <div class="setting-label">Show popup</div>
+                    <div class="toggle-switch active" data-setting="show-popup">
+                        <div class="toggle-slider"></div>
+                    </div>
+                </div>
+                <div class="setting-item">
+                    <div class="setting-label">Sound notification</div>
+                    <div class="toggle-switch" data-setting="sound-notification">
+                        <div class="toggle-slider"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="setting-group">
+                <div class="setting-title">Flashcards</div>
+                <div class="setting-item">
+                    <div class="setting-label">Dark mode</div>
+                    <div class="toggle-switch" data-setting="dark-mode">
+                        <div class="toggle-slider"></div>
+                    </div>
+                </div>
+                <div class="setting-item">
+                    <div class="setting-label">Auto save words</div>
+                    <div class="toggle-switch active" data-setting="auto-save">
+                        <div class="toggle-slider"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="setting-group">
+                <div class="setting-title">Data Management</div>
+                <button class="btn btn-danger" id="clearDataBtn">
+                    🗑️ Clear all data
+                </button>
+                <button class="btn btn-secondary" id="exportAllDataBtn">
+                    📤 Export data
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script src="sidepanel.js"></script>
-  </body>
+</body>
 </html>
