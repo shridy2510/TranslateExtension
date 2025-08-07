@@ -12,17 +12,15 @@ Tech stack:
 HTML, CSS, JavaScript, Chrome Storage API
 
 Example:
-When I double-clicked cookies on some random website, it showed:
+When I double-clicked case on some random website, it showed:
 
-cookies          ✕  
-/ˈkʊkiz/   🔊  
-Translation  
-noun  
-- A small, flat, baked good which is either crisp or soft but firm.  
-- A sweet baked good (as in the previous sense) usually having chocolate chips, fruit, nuts, etc. baked into it.  
-verb  
-- To send a cookie to (a user, computer, etc.).  
-noun  
-- Affectionate name for a cook.  
-noun  
-- A cucoloris.  
+case        ✕
+/keɪs/
+🔊
+Translation
+noun
+An actual event, situation, or fact.
+Example 1: For a change, in this case, he was telling the truth.
+A given condition or state.
+verb
+To propose hypothetical cases. 
